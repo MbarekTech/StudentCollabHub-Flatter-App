@@ -10,22 +10,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailOrUsernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _emailOrUsernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   void _login(BuildContext context) async {
     final appState = Provider.of<AppState>(context, listen: false);
-    final emailOrUsername = _emailOrUsernameController.text;
+    final email = _emailController.text;
     final password = _passwordController.text;
 
-    final user = await appState.login(emailOrUsername, password);
+    final user = await appState.login(email, password);
     if (user != null) {
       // Navigate to the home screen (to be implemented later)
       print("Login successful!");
@@ -64,9 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
-              controller: _emailOrUsernameController,
+              controller: _emailController,
               decoration: const InputDecoration(
-                labelText: 'Email or Username',
+                labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
             ),

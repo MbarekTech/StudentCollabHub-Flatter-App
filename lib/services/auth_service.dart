@@ -5,26 +5,16 @@ class AuthService {
 
   Stream<User?> get authChanges => _auth.authStateChanges();
 
-  Future<User?> loginWithEmailOrUsername({
-    required String emailOrUsername,
+  Future<User?> loginWithEmailAndPassword({
+    required String email,
     required String password,
   }) async {
     try {
-      if (emailOrUsername.contains('@')) {
-        // Login with email
-        final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: emailOrUsername,
-          password: password,
-        );
-        return userCredential.user;
-      } else {
-        // Login with username (for now, assume username is the email)
-        final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: emailOrUsername,
-          password: password,
-        );
-        return userCredential.user;
-      }
+      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
     } on FirebaseAuthException catch (e) {
       print("Firebase Auth Error: ${e.message}");
       return null;

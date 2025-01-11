@@ -35,10 +35,10 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  Future<void> login(String emailOrUsername, String password) async {
+  Future<void> login(String email, String password) async {
     setLoading(true);
-    final user = await _authService.loginWithEmailOrUsername(
-      emailOrUsername: emailOrUsername,
+    final user = await _authService.loginWithEmailAndPassword(
+      email: email,
       password: password,
     );
     setLoading(false);
