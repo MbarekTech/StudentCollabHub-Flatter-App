@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart'; // Import the LoginScreen
+import 'package:provider/provider.dart';
+import 'state/app_state.dart';
+import 'screens/login_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppState(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(), // Set LoginScreen as the home screen
+      home: const LoginScreen(),
     );
   }
 }
