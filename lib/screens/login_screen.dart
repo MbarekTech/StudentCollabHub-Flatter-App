@@ -27,11 +27,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final user = await appState.login(email, password);
     if (user != null) {
-      // Navigate to the home screen (to be implemented later)
-      print("Login successful!");
+      // Navigate to the home screen
+      Navigator.pushReplacementNamed(context, '/home');
     } else {
       // Show error message (to be implemented later)
-      print("Login failed!");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed. Please try again.')),
+      );
     }
   }
 
@@ -39,11 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final appState = Provider.of<AppState>(context, listen: false);
     final user = await appState.signInAsGuest();
     if (user != null) {
-      // Navigate to the home screen (to be implemented later)
-      print("Guest login successful!");
+      // Navigate to the home screen
+      Navigator.pushReplacementNamed(context, '/home');
     } else {
       // Show error message (to be implemented later)
-      print("Guest login failed!");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Guest login failed. Please try again.')),
+      );
     }
   }
 
