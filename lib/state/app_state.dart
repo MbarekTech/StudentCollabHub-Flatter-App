@@ -1,19 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// lib/state/app_state.dart
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
+import '../models/project_model.dart';
 import '../services/auth_service.dart';
+import '../services/database_service.dart';
 
 class AppState extends ChangeNotifier {
   UserModel? _currentUser;
   bool _isLoading = false;
+  List<ProjectModel> _projects = [];
 
   UserModel? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
+  List<ProjectModel> get projects => _projects;
 
   final AuthService _authService = AuthService();
+  final DatabaseService _databaseService = DatabaseService();
 
   AppState() {
     _setupAuthStateListener();
+    _loadProjects();
   }
 
   void setLoading(bool value) {
@@ -24,7 +30,6 @@ class AppState extends ChangeNotifier {
   void _setupAuthStateListener() {
     _authService.authChanges.listen((user) {
       if (user != null) {
-        // Simulate loading user profile data
         _currentUser = UserModel(
           uid: user.uid,
           username: user.email ?? "Unknown",
@@ -41,7 +46,12 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  Future<User?> login(String email, String password) async {
+  Future<void> _loadProjects() async {
+    _projects = await _databaseService.getAllProjects();
+    notifyListeners();
+  }
+
+  Future<void> login(String email, String password) async {
     setLoading(true);
     final user = await _authService.loginWithEmailAndPassword(
       email: email,
@@ -51,7 +61,7 @@ class AppState extends ChangeNotifier {
     return user;
   }
 
-  Future<User?> signInAsGuest() async {
+  Future<void> signInAsGuest() async {
     setLoading(true);
     final user = await _authService.signInAnonymously();
     setLoading(false);
@@ -93,6 +103,25 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       print("Error creating user: $e");
       return null;
+    }
+  }
+
+  Future<void> createProject({
+    required String title,
+    required String description,
+    required List<String> skillsNeeded,
+    required int numberOfCollaboratorsNeeded,
+  }) async {
+    try {
+      await _databaseService.createProject(
+        title: title,
+        description: description,
+        skillsNeeded: skillsNeeded,
+        numberOfCollaboratorsNeeded: numberOfCollaboratorsNeeded,
+      );
+      await _loadProjects(); // Refresh the project list
+    } catch (e) {
+      print("Error creating project: $e");
     }
   }
 }
