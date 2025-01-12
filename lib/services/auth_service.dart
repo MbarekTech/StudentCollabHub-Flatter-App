@@ -16,10 +16,7 @@ class AuthService {
       );
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      print("Firebase Auth Error: ${e.message}");
-      return null;
-    } catch (e) {
-      print("Error during login: $e");
+      print("Firebase Auth Error: ${e.code} - ${e.message}");
       return null;
     }
   }
@@ -29,7 +26,23 @@ class AuthService {
       final UserCredential userCredential = await _auth.signInAnonymously();
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      print("Firebase Auth Error: ${e.message}");
+      print("Firebase Auth Error: ${e.code} - ${e.message}");
+      return null;
+    }
+  }
+
+  Future<User?> createUserWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      print("Firebase Auth Error: ${e.code} - ${e.message}");
       return null;
     }
   }

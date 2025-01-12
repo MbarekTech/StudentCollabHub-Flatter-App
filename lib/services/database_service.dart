@@ -41,4 +41,25 @@ class DatabaseService {
       return [];
     }
   }
+
+
+  Future<void> updateProject({
+    required String projectId,
+    required String title,
+    required String description,
+    required List<String> skillsNeeded,
+    required int numberOfCollaboratorsNeeded,
+  }) async {
+    await _firestore.collection('projects').doc(projectId).update({
+      'title': title,
+      'description': description,
+      'skillsNeeded': skillsNeeded,
+      'numberOfCollaboratorsNeeded': numberOfCollaboratorsNeeded,
+    });
+  }
+
+  Future<void> deleteProject({required String projectId}) async {
+    await _firestore.collection('projects').doc(projectId).delete();
+  }
+
 }

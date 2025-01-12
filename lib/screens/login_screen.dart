@@ -31,9 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       // Show error message (to be implemented later)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login failed. Please try again.')),
-      );
+      print("Login failed!");
     }
   }
 
@@ -45,15 +43,13 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       // Show error message (to be implemented later)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Guest login failed. Please try again.')),
-      );
+      print("Guest login failed!");
     }
   }
 
-  void _navigateToCreateAccount() {
-    // TODO: Navigate to the create account screen
-    print("Navigating to create account screen");
+  void _navigateToCreateAccount(BuildContext context) {
+    // Navigate to the create account screen
+    Navigator.pushNamed(context, '/create-profile');
   }
 
   @override
@@ -95,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: _navigateToCreateAccount,
+              onPressed: () => _navigateToCreateAccount(context),
               child: const Text('Create Account'),
             ),
           ],
