@@ -42,7 +42,6 @@ class DatabaseService {
     }
   }
 
-
   Future<void> updateProject({
     required String projectId,
     required String title,
@@ -61,5 +60,4 @@ class DatabaseService {
   Future<void> deleteProject({required String projectId}) async {
     await _firestore.collection('projects').doc(projectId).delete();
   }
-
 }

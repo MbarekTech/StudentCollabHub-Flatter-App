@@ -1,4 +1,5 @@
 // lib/state/app_state.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../models/project_model.dart';
@@ -19,7 +20,7 @@ class AppState extends ChangeNotifier {
 
   AppState() {
     _setupAuthStateListener();
-    _loadProjects();
+    loadProjects();
   }
 
   void setLoading(bool value) {
@@ -46,12 +47,12 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  Future<void> _loadProjects() async {
+  Future<void> loadProjects() async {
     _projects = await _databaseService.getAllProjects();
     notifyListeners();
   }
 
-  Future<void> login(String email, String password) async {
+  Future<User?> login(String email, String password) async {
     setLoading(true);
     final user = await _authService.loginWithEmailAndPassword(
       email: email,
@@ -61,7 +62,7 @@ class AppState extends ChangeNotifier {
     return user;
   }
 
-  Future<void> signInAsGuest() async {
+  Future<User?> signInAsGuest() async {
     setLoading(true);
     final user = await _authService.signInAnonymously();
     setLoading(false);
@@ -119,9 +120,39 @@ class AppState extends ChangeNotifier {
         skillsNeeded: skillsNeeded,
         numberOfCollaboratorsNeeded: numberOfCollaboratorsNeeded,
       );
-      await _loadProjects(); // Refresh the project list
+      await loadProjects(); // Refresh the project list
     } catch (e) {
       print("Error creating project: $e");
+    }
+  }
+
+  Future<void> updateProject({
+    required String projectId,
+    required String title,
+    required String description,
+    required List<String> skillsNeeded,
+    required int numberOfCollaboratorsNeeded,
+  }) async {
+    try {
+      await _databaseService.updateProject(
+        projectId: projectId,
+        title: title,
+        description: description,
+        skillsNeeded: skillsNeeded,
+        numberOfCollaboratorsNeeded: numberOfCollaboratorsNeeded,
+      );
+      await loadProjects(); // Refresh the project list
+    } catch (e) {
+      print("Error updating project: $e");
+    }
+  }
+
+  Future<void> deleteProject({required String projectId}) async {
+    try {
+      await _databaseService.deleteProject(projectId: projectId);
+      await loadProjects(); // Refresh the project list
+    } catch (e) {
+      print("Error deleting project: $e");
     }
   }
 }
