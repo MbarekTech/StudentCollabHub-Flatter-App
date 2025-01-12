@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_mate/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'models/create_profile_screen.dart';
 import 'state/app_state.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
+        '/create-profile': (context) => const CreateProfileScreen(),
+        '/profile': (context) => const ProfileScreen(),
       },
     );
   }

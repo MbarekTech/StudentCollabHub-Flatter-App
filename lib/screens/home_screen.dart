@@ -38,6 +38,14 @@ class HomeScreen extends StatelessWidget {
               'This is the home screen.',
               style: TextStyle(fontSize: 18),
             ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the profile screen
+                Navigator.pushNamed(context, '/profile');
+              },
+              child: const Text('View Profile'),
+            ),
           ],
         ),
       ),
