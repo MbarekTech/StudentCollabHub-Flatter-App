@@ -49,6 +49,14 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
+                // Navigate to the project listing screen
+                Navigator.pushNamed(context, '/projects');
+              },
+              child: const Text('View Projects'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
                 // Navigate to the create project screen
                 Navigator.pushNamed(context, '/create-project');
               },
