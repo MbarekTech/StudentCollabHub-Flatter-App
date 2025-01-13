@@ -1,6 +1,5 @@
-// lib/state/app_state.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../models/project_model.dart';
 import '../services/auth_service.dart';
@@ -52,7 +51,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<User?> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     setLoading(true);
     final user = await _authService.loginWithEmailAndPassword(
       email: email,
@@ -62,7 +61,7 @@ class AppState extends ChangeNotifier {
     return user;
   }
 
-  Future<User?> signInAsGuest() async {
+  Future<void> signInAsGuest() async {
     setLoading(true);
     final user = await _authService.signInAnonymously();
     setLoading(false);
@@ -154,5 +153,23 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       print("Error deleting project: $e");
     }
+  }
+
+  Future<void> sendMessage({
+    required String receiverId,
+    required String text,
+  }) async {
+    try {
+      await _databaseService.sendMessage(
+        receiverId: receiverId,
+        text: text,
+      );
+    } catch (e) {
+      print("Error sending message: $e");
+    }
+  }
+
+  Stream<QuerySnapshot> getMessagesStream({required String receiverId}) {
+    return _databaseService.getMessagesStream(receiverId: receiverId);
   }
 }

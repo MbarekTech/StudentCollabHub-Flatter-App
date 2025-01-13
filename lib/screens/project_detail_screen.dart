@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../models/project_model.dart';
 import 'create_project_screen.dart';
+import 'message_screen.dart';
 
 class ProjectDetailScreen extends StatelessWidget {
   final ProjectModel project;
@@ -47,17 +48,13 @@ class ProjectDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Title: ${project.title}',
-                style: const TextStyle(fontSize: 20)),
+            Text('Title: ${project.title}', style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 16),
-            Text('Description: ${project.description}',
-                style: const TextStyle(fontSize: 18)),
+            Text('Description: ${project.description}', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 16),
-            Text('Skills Needed: ${project.skillsNeeded.join(", ")}',
-                style: const TextStyle(fontSize: 18)),
+            Text('Skills Needed: ${project.skillsNeeded.join(", ")}', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 16),
-            Text('Collaborators Needed: ${project.numberOfCollaboratorsNeeded}',
-                style: const TextStyle(fontSize: 18)),
+            Text('Collaborators Needed: ${project.numberOfCollaboratorsNeeded}', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 24),
             if (currentUser != null && currentUser.uid == project.postedBy) ...[
               Center(
@@ -77,6 +74,21 @@ class ProjectDetailScreen extends StatelessWidget {
                 ),
               ),
             ],
+            const SizedBox(height: 16),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to the message screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MessageScreen(receiverId: project.postedBy),
+                    ),
+                  );
+                },
+                child: const Text('Message Creator'),
+              ),
+            ),
           ],
         ),
       ),

@@ -42,6 +42,7 @@ class DatabaseService {
     }
   }
 
+
   Future<void> updateProject({
     required String projectId,
     required String title,
@@ -59,5 +60,49 @@ class DatabaseService {
 
   Future<void> deleteProject({required String projectId}) async {
     await _firestore.collection('projects').doc(projectId).delete();
+  }
+
+  Future<void> sendMessage({
+    required String receiverId,
+    required String text,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final message = {
+        'text': text,
+        'senderId': user.uid,
+        'receiverId': receiverId,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+
+      // Create a unique chat ID between the two users
+      final chatId = user.uid.compareTo(receiverId) > 0
+          ? '${user.uid}_$receiverId'
+          : '${receiverId}_${user.uid}';
+
+      await _firestore
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .add(message);
+    }
+  }
+
+  Stream<QuerySnapshot> getMessagesStream({required String receiverId}) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Create a unique chat ID between the two users
+      final chatId = user.uid.compareTo(receiverId) > 0
+          ? '${user.uid}_$receiverId'
+          : '${receiverId}_${user.uid}';
+
+      return _firestore
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .orderBy('timestamp', descending: true)
+          .snapshots();
+    }
+    return const Stream.empty();
   }
 }
