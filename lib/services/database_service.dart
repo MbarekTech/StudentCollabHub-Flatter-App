@@ -42,7 +42,6 @@ class DatabaseService {
     }
   }
 
-
   Future<void> updateProject({
     required String projectId,
     required String title,
@@ -110,9 +109,14 @@ class DatabaseService {
     required String projectId,
     required String userId,
   }) async {
-    await _firestore.collection('projects').doc(projectId).update({
-      'collaborators': FieldValue.arrayUnion([userId]),
-    });
+    try {
+      await _firestore.collection('projects').doc(projectId).update({
+        'collaborators': FieldValue.arrayUnion([userId]),
+      });
+      print("Collaborator added successfully!");
+    } catch (e) {
+      print("Error adding collaborator: $e");
+    }
   }
 
   Future<void> removeCollaborator({
@@ -123,6 +127,7 @@ class DatabaseService {
       'collaborators': FieldValue.arrayRemove([userId]),
     });
   }
+
   Future<void> updateUserProfile({
     required String uid,
     required String username,

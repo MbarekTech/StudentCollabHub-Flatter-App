@@ -206,6 +206,7 @@ class AppState extends ChangeNotifier {
       print("Error removing collaborator: $e");
     }
   }
+
   Future<void> updateUserProfile({
     required String username,
     required String email,
@@ -245,5 +246,4 @@ class AppState extends ChangeNotifier {
       print("Error updating user profile: $e");
     }
   }
-
 }
