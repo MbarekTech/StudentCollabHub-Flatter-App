@@ -65,6 +65,9 @@ class AppState extends ChangeNotifier {
   Future<User?> signInAsGuest() async {
     setLoading(true);
     final user = await _authService.signInAnonymously();
+    if (user != null) {
+      await loadProjects();
+    }
     setLoading(false);
     return user;
   }

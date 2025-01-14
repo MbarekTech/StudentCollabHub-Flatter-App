@@ -35,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+
   void _signInAsGuest(BuildContext context) async {
     final appState = Provider.of<AppState>(context, listen: false);
     final user = await appState.signInAsGuest();
