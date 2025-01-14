@@ -123,5 +123,24 @@ class DatabaseService {
       'collaborators': FieldValue.arrayRemove([userId]),
     });
   }
-
+  Future<void> updateUserProfile({
+    required String uid,
+    required String username,
+    required String email,
+    required String? name,
+    required String? major,
+    required List<String>? skills,
+    required String? bio,
+    required bool receiveNotifications,
+  }) async {
+    await _firestore.collection('users').doc(uid).update({
+      'username': username,
+      'email': email,
+      'name': name,
+      'major': major,
+      'skills': skills,
+      'bio': bio,
+      'receiveNotifications': receiveNotifications,
+    });
+  }
 }

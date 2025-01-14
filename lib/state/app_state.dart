@@ -35,7 +35,7 @@ class AppState extends ChangeNotifier {
           uid: user.uid,
           username: user.email ?? "Unknown",
           email: user.email ?? "",
-          name: "John Doe", // Default value
+          name: "Mbarek Ben", // Default value
           major: "Computer Science", // Default value
           skills: ["Flutter", "Dart", "Firebase"], // Default value
           bio: "I love coding!", // Default value
@@ -204,6 +204,45 @@ class AppState extends ChangeNotifier {
       await loadProjects(); // Refresh the project list
     } catch (e) {
       print("Error removing collaborator: $e");
+    }
+  }
+  Future<void> updateUserProfile({
+    required String username,
+    required String email,
+    required String? name,
+    required String? major,
+    required List<String>? skills,
+    required String? bio,
+    required bool receiveNotifications,
+  }) async {
+    try {
+      final user = _authService.getCurrentUser();
+      if (user != null) {
+        await _databaseService.updateUserProfile(
+          uid: user.uid,
+          username: username,
+          email: email,
+          name: name,
+          major: major,
+          skills: skills,
+          bio: bio,
+          receiveNotifications: receiveNotifications,
+        );
+        // Update the current user in the app state
+        _currentUser = UserModel(
+          uid: user.uid,
+          username: username,
+          email: email,
+          name: name,
+          major: major,
+          skills: skills,
+          bio: bio,
+          receiveNotifications: receiveNotifications,
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error updating user profile: $e");
     }
   }
 
