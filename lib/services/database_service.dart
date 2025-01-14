@@ -105,4 +105,23 @@ class DatabaseService {
     }
     return const Stream.empty();
   }
+
+  Future<void> addCollaborator({
+    required String projectId,
+    required String userId,
+  }) async {
+    await _firestore.collection('projects').doc(projectId).update({
+      'collaborators': FieldValue.arrayUnion([userId]),
+    });
+  }
+
+  Future<void> removeCollaborator({
+    required String projectId,
+    required String userId,
+  }) async {
+    await _firestore.collection('projects').doc(projectId).update({
+      'collaborators': FieldValue.arrayRemove([userId]),
+    });
+  }
+
 }

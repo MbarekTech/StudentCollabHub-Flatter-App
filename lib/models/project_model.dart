@@ -5,6 +5,7 @@ class ProjectModel {
   final List<String> skillsNeeded;
   final String postedBy;
   final int numberOfCollaboratorsNeeded;
+  final List<String> collaborators;
 
   ProjectModel({
     required this.projectId,
@@ -13,6 +14,7 @@ class ProjectModel {
     required this.skillsNeeded,
     required this.postedBy,
     required this.numberOfCollaboratorsNeeded,
+    this.collaborators = const [],
   });
 
   factory ProjectModel.fromMap(Map<String, dynamic> map, String projectId) {
@@ -23,6 +25,7 @@ class ProjectModel {
       skillsNeeded: List<String>.from(map['skillsNeeded'] ?? []),
       postedBy: map['postedBy'] ?? '',
       numberOfCollaboratorsNeeded: map['numberOfCollaboratorsNeeded'] ?? 1,
+      collaborators: List<String>.from(map['collaborators'] ?? []),
     );
   }
 
@@ -33,6 +36,7 @@ class ProjectModel {
       'skillsNeeded': skillsNeeded,
       'postedBy': postedBy,
       'numberOfCollaboratorsNeeded': numberOfCollaboratorsNeeded,
+      'collaborators': collaborators,
     };
   }
 }

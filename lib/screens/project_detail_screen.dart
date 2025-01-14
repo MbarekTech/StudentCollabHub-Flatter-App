@@ -34,10 +34,33 @@ class ProjectDetailScreen extends StatelessWidget {
     Navigator.pop(context);
   }
 
+  void _joinProject(BuildContext context) async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    final currentUser = appState.currentUser;
+    if (currentUser != null) {
+      await appState.addCollaborator(
+        projectId: project.projectId,
+        userId: currentUser.uid,
+      );
+    }
+  }
+
+  void _leaveProject(BuildContext context) async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    final currentUser = appState.currentUser;
+    if (currentUser != null) {
+      await appState.removeCollaborator(
+        projectId: project.projectId,
+        userId: currentUser.uid,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final currentUser = appState.currentUser;
+    final isCollaborator = currentUser != null && project.collaborators.contains(currentUser.uid);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,6 +78,8 @@ class ProjectDetailScreen extends StatelessWidget {
             Text('Skills Needed: ${project.skillsNeeded.join(", ")}', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 16),
             Text('Collaborators Needed: ${project.numberOfCollaboratorsNeeded}', style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 16),
+            Text('Collaborators: ${project.collaborators.length}', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 24),
             if (currentUser != null && currentUser.uid == project.postedBy) ...[
               Center(
@@ -74,21 +99,29 @@ class ProjectDetailScreen extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navigate to the message screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MessageScreen(receiverId: project.postedBy),
-                    ),
-                  );
-                },
-                child: const Text('Message Creator'),
+            if (currentUser != null && currentUser.uid != project.postedBy) ...[
+              Center(
+                child: ElevatedButton(
+                  onPressed: isCollaborator ? () => _leaveProject(context) : () => _joinProject(context),
+                  child: Text(isCollaborator ? 'Leave Project' : 'Join Project'),
+                ),
               ),
-            ),
+              const SizedBox(height: 16),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigate to the message screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MessageScreen(receiverId: project.postedBy),
+                      ),
+                    );
+                  },
+                  child: const Text('Message Creator'),
+                ),
+              ),
+            ],
           ],
         ),
       ),

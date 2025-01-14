@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/user_model.dart';
 import '../models/project_model.dart';
 import '../services/auth_service.dart';
@@ -51,7 +52,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(String email, String password) async {
+  Future<User?> login(String email, String password) async {
     setLoading(true);
     final user = await _authService.loginWithEmailAndPassword(
       email: email,
@@ -61,7 +62,7 @@ class AppState extends ChangeNotifier {
     return user;
   }
 
-  Future<void> signInAsGuest() async {
+  Future<User?> signInAsGuest() async {
     setLoading(true);
     final user = await _authService.signInAnonymously();
     setLoading(false);
@@ -172,4 +173,35 @@ class AppState extends ChangeNotifier {
   Stream<QuerySnapshot> getMessagesStream({required String receiverId}) {
     return _databaseService.getMessagesStream(receiverId: receiverId);
   }
+
+  Future<void> addCollaborator({
+    required String projectId,
+    required String userId,
+  }) async {
+    try {
+      await _databaseService.addCollaborator(
+        projectId: projectId,
+        userId: userId,
+      );
+      await loadProjects(); // Refresh the project list
+    } catch (e) {
+      print("Error adding collaborator: $e");
+    }
+  }
+
+  Future<void> removeCollaborator({
+    required String projectId,
+    required String userId,
+  }) async {
+    try {
+      await _databaseService.removeCollaborator(
+        projectId: projectId,
+        userId: userId,
+      );
+      await loadProjects(); // Refresh the project list
+    } catch (e) {
+      print("Error removing collaborator: $e");
+    }
+  }
+
 }
