@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/create_profile_screen.dart';
@@ -10,6 +9,7 @@ import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -32,6 +32,19 @@ class MyApp extends StatelessWidget {
       title: 'Project Match',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey[100],
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.blueAccent,
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blueAccent,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+            textStyle: const TextStyle(color: Colors.white),
+          ),
+        ),
       ),
       initialRoute: '/login',
       routes: {

@@ -56,7 +56,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       bio: _bioController.text.isEmpty ? null : _bioController.text,
       receiveNotifications: _receiveNotifications,
     );
-    // Navigate back to the profile screen
     Navigator.pop(context);
   }
 
@@ -64,76 +63,96 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
+      body: Container(
+        color: Colors.grey[100],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _majorController,
-                decoration: const InputDecoration(
-                  labelText: 'Major',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _majorController,
+                  decoration: const InputDecoration(
+                    labelText: 'Major',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _skillsController,
-                decoration: const InputDecoration(
-                  labelText: 'Skills (comma-separated)',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _skillsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Skills (comma-separated)',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _bioController,
-                decoration: const InputDecoration(
-                  labelText: 'Bio',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _bioController,
+                  decoration: const InputDecoration(
+                    labelText: 'Bio',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              SwitchListTile(
-                title: const Text('Receive Notifications'),
-                value: _receiveNotifications,
-                onChanged: (value) {
-                  setState(() {
-                    _receiveNotifications = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => _updateProfile(context),
-                child: const Text('Save Profile'),
-              ),
-            ],
+                const SizedBox(height: 16),
+                SwitchListTile(
+                  title: const Text('Receive Notifications'),
+                  value: _receiveNotifications,
+                  onChanged: (value) {
+                    setState(() {
+                      _receiveNotifications = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () => _updateProfile(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  ),
+                  child: const Text('Save Profile', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
           ),
         ),
       ),

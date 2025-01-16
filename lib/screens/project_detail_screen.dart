@@ -23,7 +23,6 @@ class ProjectDetailScreen extends StatelessWidget {
     );
 
     if (result == true) {
-      // Refresh the project list after editing
       await appState.loadProjects();
     }
   }
@@ -31,7 +30,6 @@ class ProjectDetailScreen extends StatelessWidget {
   void _deleteProject(BuildContext context) async {
     final appState = Provider.of<AppState>(context, listen: false);
     await appState.deleteProject(projectId: projectId);
-    // Navigate back to the project listing screen
     Navigator.pop(context);
   }
 
@@ -64,7 +62,8 @@ class ProjectDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Project Details'),
+        title: const Text('Project Details', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
@@ -91,21 +90,25 @@ class ProjectDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Title: ${project.title}', style: const TextStyle(fontSize: 20)),
+                Text('Title: ${project.title}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 16),
-                Text('Description: ${project.description}', style: const TextStyle(fontSize: 18)),
+                Text('Description: ${project.description}', style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 16),
-                Text('Skills Needed: ${project.skillsNeeded.join(", ")}', style: const TextStyle(fontSize: 18)),
+                Text('Skills Needed: ${project.skillsNeeded.join(", ")}', style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 16),
-                Text('Collaborators Needed: ${project.numberOfCollaboratorsNeeded}', style: const TextStyle(fontSize: 18)),
+                Text('Collaborators Needed: ${project.numberOfCollaboratorsNeeded}', style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 16),
-                Text('Collaborators: ${project.collaborators.length}', style: const TextStyle(fontSize: 18)),
+                Text('Collaborators: ${project.collaborators.length}', style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 24),
                 if (currentUser != null && currentUser.uid == project.postedBy) ...[
                   Center(
                     child: ElevatedButton(
                       onPressed: () => _editProject(context, project),
-                      child: const Text('Edit Project'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      ),
+                      child: const Text('Edit Project', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -114,8 +117,9 @@ class ProjectDetailScreen extends StatelessWidget {
                       onPressed: () => _deleteProject(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                       ),
-                      child: const Text('Delete Project'),
+                      child: const Text('Delete Project', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ],
@@ -123,14 +127,17 @@ class ProjectDetailScreen extends StatelessWidget {
                   Center(
                     child: ElevatedButton(
                       onPressed: isCollaborator ? () => _leaveProject(context) : () => _joinProject(context),
-                      child: Text(isCollaborator ? 'Leave Project' : 'Join Project'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isCollaborator ? Colors.red : Colors.blueAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      ),
+                      child: Text(isCollaborator ? 'Leave Project' : 'Join Project', style: const TextStyle(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to the message screen
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -138,7 +145,11 @@ class ProjectDetailScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const Text('Message Creator'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      ),
+                      child: const Text('Message Creator', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ],

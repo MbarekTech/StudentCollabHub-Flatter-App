@@ -45,14 +45,14 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Projects'),
+        title: const Text('Projects', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
         actions: [
           IconButton(
             onPressed: () {
-              // Navigate to the create project screen
               Navigator.pushNamed(context, '/create-project');
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.add, color: Colors.white),
           ),
         ],
         bottom: PreferredSize(
@@ -67,29 +67,39 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                filled: true,
+                fillColor: Colors.white,
               ),
             ),
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: _filteredProjects.length,
-        itemBuilder: (context, index) {
-          final project = _filteredProjects[index];
-          return ListTile(
-            title: Text(project.title),
-            subtitle: Text(project.description),
-            onTap: () {
-              // Navigate to the project detail screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProjectDetailScreen(projectId: project.projectId),
-                ),
-              );
-            },
-          );
-        },
+      body: Container(
+        color: Colors.grey[100],
+        child: ListView.builder(
+          padding: const EdgeInsets.all(8.0),
+          itemCount: _filteredProjects.length,
+          itemBuilder: (context, index) {
+            final project = _filteredProjects[index];
+            return Card(
+              elevation: 2,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                title: Text(project.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(project.description),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProjectDetailScreen(projectId: project.projectId),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

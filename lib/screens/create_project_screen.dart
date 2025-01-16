@@ -47,7 +47,6 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
 
     if (title.isNotEmpty && description.isNotEmpty && skills.isNotEmpty) {
       if (widget.project == null) {
-        // Create a new project
         await appState.createProject(
           title: title,
           description: description,
@@ -55,7 +54,6 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
           numberOfCollaboratorsNeeded: collaborators,
         );
       } else {
-        // Update an existing project
         await appState.updateProject(
           projectId: widget.project!.projectId,
           title: title,
@@ -64,10 +62,8 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
           numberOfCollaboratorsNeeded: collaborators,
         );
       }
-      // Navigate back to the project listing screen
-      Navigator.pop(context, true); // Pass `true` to indicate success
+      Navigator.pop(context, true);
     } else {
-      // Show error message (to be implemented later)
       print("Please fill in all fields");
     }
   }
@@ -76,51 +72,67 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.project == null ? 'Create Project' : 'Edit Project'),
+        title: Text(widget.project == null ? 'Create Project' : 'Edit Project', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
+      body: Container(
+        color: Colors.grey[100],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Description',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _skillsController,
-                decoration: const InputDecoration(
-                  labelText: 'Skills Needed (comma-separated)',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _skillsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Skills Needed (comma-separated)',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _collaboratorsController,
-                decoration: const InputDecoration(
-                  labelText: 'Number of Collaborators Needed',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _collaboratorsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Number of Collaborators Needed',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  keyboardType: TextInputType.number,
                 ),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => _createOrUpdateProject(context),
-                child: Text(widget.project == null ? 'Create Project' : 'Update Project'),
-              ),
-            ],
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () => _createOrUpdateProject(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  ),
+                  child: Text(widget.project == null ? 'Create Project' : 'Update Project', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
           ),
         ),
       ),

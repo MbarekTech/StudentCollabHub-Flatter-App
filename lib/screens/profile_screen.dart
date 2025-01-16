@@ -13,44 +13,51 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Profile', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (user != null) ...[
-              Text('Username: ${user.username}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 16),
-              Text('Email: ${user.email}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 16),
-              Text('Name: ${user.name ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 16),
-              Text('Major: ${user.major ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 16),
-              Text('Skills: ${user.skills?.join(", ") ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 16),
-              Text('Bio: ${user.bio ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 24),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the edit profile screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditProfileScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text('Edit Profile'),
+      body: Container(
+        color: Colors.grey[100],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (user != null) ...[
+                Text('Username: ${user.username}', style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 16),
+                Text('Email: ${user.email}', style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 16),
+                Text('Name: ${user.name ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 16),
+                Text('Major: ${user.major ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 16),
+                Text('Skills: ${user.skills?.join(", ") ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 16),
+                Text('Bio: ${user.bio ?? "Not provided"}', style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 24),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditProfileScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                    child: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
+                  ),
                 ),
-              ),
-            ] else ...[
-              const Center(child: Text('No user data available')),
+              ] else ...[
+                const Center(child: Text('No user data available')),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

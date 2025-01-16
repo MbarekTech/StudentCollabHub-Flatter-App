@@ -12,57 +12,69 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Home', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
         actions: [
           IconButton(
             onPressed: () async {
               await appState.signOut();
-              // Navigate back to the login screen
               Navigator.pushReplacementNamed(context, '/login');
             },
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.white),
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (user != null)
-              Text(
-                'Welcome, ${user.email}!',
-                style: const TextStyle(fontSize: 24),
+      body: Container(
+        color: Colors.grey[100],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (user != null)
+                Text(
+                  'Welcome, ${user.email}!',
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              const SizedBox(height: 16),
+              const Text(
+                'This is the home screen.',
+                style: TextStyle(fontSize: 18),
               ),
-            const SizedBox(height: 16),
-            const Text(
-              'This is the home screen.',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the profile screen
-                Navigator.pushNamed(context, '/profile');
-              },
-              child: const Text('View Profile'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the project listing screen
-                Navigator.pushNamed(context, '/projects');
-              },
-              child: const Text('View Projects'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the create project screen
-                Navigator.pushNamed(context, '/create-project');
-              },
-              child: const Text('Create Project'),
-            ),
-          ],
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/profile');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                child: const Text('View Profile', style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/projects');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                child: const Text('View Projects', style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/create-project');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                child: const Text('Create Project', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
         ),
       ),
     );

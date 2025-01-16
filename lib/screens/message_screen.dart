@@ -40,69 +40,75 @@ class _MessageScreenState extends State<MessageScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Messages'),
+        title: const Text('Messages', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder(
-              stream: appState.getMessagesStream(receiverId: widget.receiverId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+      body: Container(
+        color: Colors.grey[100],
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
+                stream: appState.getMessagesStream(receiverId: widget.receiverId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text('No messages yet.'));
-                }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No messages yet.'));
+                  }
 
-                final messages = snapshot.data!.docs;
+                  final messages = snapshot.data!.docs;
 
-                return ListView.builder(
-                  reverse: true,
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final message = messages[index].data() as Map<String, dynamic>;
-                    final isMe = message['senderId'] == currentUser?.uid;
+                  return ListView.builder(
+                    reverse: true,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final message = messages[index].data() as Map<String, dynamic>;
+                      final isMe = message['senderId'] == currentUser?.uid;
 
-                    return Align(
-                      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: isMe ? Colors.blue[100] : Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
+                      return Align(
+                        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: isMe ? Colors.blue[100] : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(message['text']),
                         ),
-                        child: Text(message['text']),
-                      ),
-                    );
-                  },
-                );
-              },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: const InputDecoration(
-                      hintText: 'Type a message...',
-                      border: OutlineInputBorder(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: const InputDecoration(
+                        hintText: 'Type a message...',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () => _sendMessage(context),
-                  icon: const Icon(Icons.send),
-                ),
-              ],
+                  IconButton(
+                    onPressed: () => _sendMessage(context),
+                    icon: const Icon(Icons.send),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
