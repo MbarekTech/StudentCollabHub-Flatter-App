@@ -103,7 +103,7 @@ class ProjectDetailScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 if (currentUser != null) ...[
                   Center(
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: () {
                         if (isFavorited) {
                           appState.removeFavoriteProject(projectId);
@@ -111,52 +111,68 @@ class ProjectDetailScreen extends StatelessWidget {
                           appState.addFavoriteProject(projectId);
                         }
                       },
+                      icon: Icon(
+                        isFavorited ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.white,
+                      ), // Favorite icon
+                      label: Text(
+                        isFavorited ? 'Remove from Favorites' : 'Add to Favorites',
+                        style: const TextStyle(color: Colors.white),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isFavorited ? Colors.red : Colors.blueAccent,
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                       ),
-                      child: Text(isFavorited ? 'Remove from Favorites' : 'Add to Favorites', style: const TextStyle(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(height: 16),
                 ],
                 if (currentUser != null && currentUser.uid == project.postedBy) ...[
                   Center(
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: () => _editProject(context, project),
+                      icon: const Icon(Icons.edit, color: Colors.white), // Edit icon
+                      label: const Text('Edit Project', style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                       ),
-                      child: const Text('Edit Project', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Center(
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: () => _deleteProject(context),
+                      icon: const Icon(Icons.delete, color: Colors.white), // Delete icon
+                      label: const Text('Delete Project', style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                       ),
-                      child: const Text('Delete Project', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ],
                 if (currentUser != null && currentUser.uid != project.postedBy) ...[
                   Center(
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: isCollaborator ? () => _leaveProject(context) : () => _joinProject(context),
+                      icon: Icon(
+                        isCollaborator ? Icons.exit_to_app : Icons.group_add,
+                        color: Colors.white,
+                      ), // Join/Leave icon
+                      label: Text(
+                        isCollaborator ? 'Leave Project' : 'Join Project',
+                        style: const TextStyle(color: Colors.white),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isCollaborator ? Colors.red : Colors.blueAccent,
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                       ),
-                      child: Text(isCollaborator ? 'Leave Project' : 'Join Project', style: const TextStyle(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Center(
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -165,11 +181,12 @@ class ProjectDetailScreen extends StatelessWidget {
                           ),
                         );
                       },
+                      icon: const Icon(Icons.message, color: Colors.white), // Message icon
+                      label: const Text('Message Creator', style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                       ),
-                      child: const Text('Message Creator', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ],

@@ -41,37 +41,52 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pushNamed(context, '/profile');
                 },
+                icon: const Icon(Icons.person, color: Colors.white), // Profile icon
+                label: const Text('View Profile', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                child: const Text('View Profile', style: TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pushNamed(context, '/projects');
                 },
+                icon: const Icon(Icons.work, color: Colors.white), // Projects icon
+                label: const Text('View Projects', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                child: const Text('View Projects', style: TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pushNamed(context, '/create-project');
                 },
+                icon: const Icon(Icons.add, color: Colors.white), // Create project icon
+                label: const Text('Create Project', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                child: const Text('Create Project', style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/favorites');
+                },
+                icon: const Icon(Icons.favorite, color: Colors.white), // Favorites icon
+                label: const Text('View Favorites', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
               ),
             ],
           ),

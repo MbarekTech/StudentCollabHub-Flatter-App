@@ -17,7 +17,7 @@ class FavoritesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Favorites', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.purple, // Different color for favorites
+        backgroundColor: Colors.purple,
       ),
       body: Container(
         color: Colors.grey[100],
@@ -30,6 +30,7 @@ class FavoritesScreen extends StatelessWidget {
               elevation: 2,
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
+                leading: const Icon(Icons.favorite, color: Colors.red), // Favorite icon
                 title: Text(project.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(project.description),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
