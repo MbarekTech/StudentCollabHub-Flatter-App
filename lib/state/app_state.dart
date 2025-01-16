@@ -290,6 +290,27 @@ class AppState extends ChangeNotifier {
     return _currentUser?.favoriteProjects.contains(projectId) ?? false;
   }
 
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _authService.getCurrentUser();
+    if (user != null) {
+      try {
+        // Reauthenticate the user
+        final credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: currentPassword,
+        );
+        await user.reauthenticateWithCredential(credential);
 
+        // Update the password
+        await user.updatePassword(newPassword);
+      } catch (e) {
+        print("Error changing password: $e");
+        rethrow;
+      }
+    }
+  }
 
 }

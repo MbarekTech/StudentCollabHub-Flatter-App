@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mate/screens/messages_screen.dart';
+import 'package:project_mate/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'models/user_model.dart';
 import 'screens/create_profile_screen.dart';
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
         '/users': (context) => const UsersScreen(),
         '/user-profile': (context) => UserProfileScreen(user: ModalRoute.of(context)!.settings.arguments as UserModel),
         '/messages': (context) => const MessagesScreen(),
+        '/settings': (context) => const SettingsScreen(),
 
       },
     );

@@ -106,6 +106,15 @@ class HomeScreen extends StatelessWidget {
                         Navigator.pushNamed(context, '/messages');
                       },
                     ),
+                    _buildActionCard(
+                      context,
+                      icon: Icons.settings,
+                      label: 'Settings',
+                      color: Colors.blueGrey,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
+                    ),
                   ],
                 ),
               ),
