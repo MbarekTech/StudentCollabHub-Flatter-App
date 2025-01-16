@@ -57,6 +57,7 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
       appBar: AppBar(
         title: const Text('Projects', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blueAccent,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () {
@@ -94,12 +95,12 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
           itemBuilder: (context, index) {
             final project = _filteredProjects[index];
             return Card(
-              elevation: 2,
+              elevation: 4,
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
-                leading: const Icon(Icons.work, color: Colors.blueAccent), // Icon for projects
-                title: Text(project.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text(project.description),
+                leading: const Icon(Icons.work, color: Colors.blueAccent),
+                title: Text(project.title, style: Theme.of(context).textTheme.titleLarge),
+                subtitle: Text(project.description, style: Theme.of(context).textTheme.bodyLarge),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   Navigator.push(

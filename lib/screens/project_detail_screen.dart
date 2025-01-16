@@ -16,9 +16,7 @@ class ProjectDetailScreen extends StatelessWidget {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CreateProjectScreen(
-          project: project,
-        ),
+        builder: (context) => CreateProjectScreen(project: project),
       ),
     );
 
@@ -59,12 +57,13 @@ class ProjectDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final currentUser = appState.currentUser;
-    final isFavorited = appState.isProjectFavorited(projectId); // Check if project is favorited
+    final isFavorited = appState.isProjectFavorited(projectId);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Project Details', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blueAccent,
+        elevation: 0,
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
@@ -86,20 +85,35 @@ class ProjectDetailScreen extends StatelessWidget {
           final isCollaborator =
               currentUser != null && project.collaborators.contains(currentUser.uid);
 
-          return Padding(
+          return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Title: ${project.title}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text(
+                  project.title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 const SizedBox(height: 16),
-                Text('Description: ${project.description}', style: const TextStyle(fontSize: 16)),
+                Text(
+                  project.description,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
                 const SizedBox(height: 16),
-                Text('Skills Needed: ${project.skillsNeeded.join(", ")}', style: const TextStyle(fontSize: 16)),
+                Text(
+                  'Skills Needed: ${project.skillsNeeded.join(", ")}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
                 const SizedBox(height: 16),
-                Text('Collaborators Needed: ${project.numberOfCollaboratorsNeeded}', style: const TextStyle(fontSize: 16)),
+                Text(
+                  'Collaborators Needed: ${project.numberOfCollaboratorsNeeded}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
                 const SizedBox(height: 16),
-                Text('Collaborators: ${project.collaborators.length}', style: const TextStyle(fontSize: 16)),
+                Text(
+                  'Collaborators: ${project.collaborators.length}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
                 const SizedBox(height: 24),
                 if (currentUser != null) ...[
                   Center(
@@ -114,7 +128,7 @@ class ProjectDetailScreen extends StatelessWidget {
                       icon: Icon(
                         isFavorited ? Icons.favorite : Icons.favorite_border,
                         color: Colors.white,
-                      ), // Favorite icon
+                      ),
                       label: Text(
                         isFavorited ? 'Remove from Favorites' : 'Add to Favorites',
                         style: const TextStyle(color: Colors.white),
@@ -131,7 +145,7 @@ class ProjectDetailScreen extends StatelessWidget {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () => _editProject(context, project),
-                      icon: const Icon(Icons.edit, color: Colors.white), // Edit icon
+                      icon: const Icon(Icons.edit, color: Colors.white),
                       label: const Text('Edit Project', style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
@@ -143,7 +157,7 @@ class ProjectDetailScreen extends StatelessWidget {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () => _deleteProject(context),
-                      icon: const Icon(Icons.delete, color: Colors.white), // Delete icon
+                      icon: const Icon(Icons.delete, color: Colors.white),
                       label: const Text('Delete Project', style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
@@ -159,7 +173,7 @@ class ProjectDetailScreen extends StatelessWidget {
                       icon: Icon(
                         isCollaborator ? Icons.exit_to_app : Icons.group_add,
                         color: Colors.white,
-                      ), // Join/Leave icon
+                      ),
                       label: Text(
                         isCollaborator ? 'Leave Project' : 'Join Project',
                         style: const TextStyle(color: Colors.white),
@@ -181,7 +195,7 @@ class ProjectDetailScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.message, color: Colors.white), // Message icon
+                      icon: const Icon(Icons.message, color: Colors.white),
                       label: const Text('Message Creator', style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,

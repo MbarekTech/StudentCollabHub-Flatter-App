@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blueAccent,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () async {
@@ -34,7 +35,7 @@ class HomeScreen extends StatelessWidget {
               if (user != null)
                 Text(
                   'Welcome, ${user.email}!',
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               const SizedBox(height: 16),
               const Text(
@@ -45,10 +46,10 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: GridView(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Two columns
-                    crossAxisSpacing: 16, // Spacing between columns
-                    mainAxisSpacing: 16, // Spacing between rows
-                    childAspectRatio: 1.2, // Aspect ratio of the cards
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.2,
                   ),
                   children: [
                     _buildActionCard(
@@ -96,6 +97,15 @@ class HomeScreen extends StatelessWidget {
                         Navigator.pushNamed(context, '/users');
                       },
                     ),
+                    _buildActionCard(
+                      context,
+                      icon: Icons.message,
+                      label: 'Messages',
+                      color: Colors.teal,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/messages');
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -106,7 +116,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Helper method to build an action card
   Widget _buildActionCard(
       BuildContext context, {
         required IconData icon,
