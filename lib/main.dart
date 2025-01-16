@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_mate/screens/favorites_screen.dart';
 import 'package:provider/provider.dart';
+import 'models/user_model.dart';
 import 'screens/create_profile_screen.dart';
 import 'screens/create_project_screen.dart';
 import 'screens/profile_screen.dart';
@@ -10,6 +10,9 @@ import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'screens/favorites_screen.dart';
+import 'screens/users_screen.dart'; // Import Users Screen
+import 'screens/user_profile_screen.dart'; // Import User Profile Screen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +59,8 @@ class MyApp extends StatelessWidget {
         '/create-project': (context) => const CreateProjectScreen(),
         '/projects': (context) => const ProjectListingScreen(),
         '/favorites': (context) => const FavoritesScreen(),
+        '/users': (context) => const UsersScreen(), // Add Users Screen
+        '/user-profile': (context) => UserProfileScreen(user: ModalRoute.of(context)!.settings.arguments as UserModel), // Add User Profile Screen
       },
     );
   }

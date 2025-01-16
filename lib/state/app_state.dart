@@ -290,4 +290,6 @@ class AppState extends ChangeNotifier {
     return _currentUser?.favoriteProjects.contains(projectId) ?? false;
   }
 
+
+
 }

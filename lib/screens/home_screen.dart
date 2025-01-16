@@ -26,9 +26,10 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Container(
         color: Colors.grey[100],
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (user != null)
                 Text(
@@ -37,56 +38,109 @@ class HomeScreen extends StatelessWidget {
                 ),
               const SizedBox(height: 16),
               const Text(
-                'This is the home screen.',
-                style: TextStyle(fontSize: 18),
+                'What would you like to do today?',
+                style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
               const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/profile');
-                },
-                icon: const Icon(Icons.person, color: Colors.white), // Profile icon
-                label: const Text('View Profile', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              Expanded(
+                child: GridView(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Two columns
+                    crossAxisSpacing: 16, // Spacing between columns
+                    mainAxisSpacing: 16, // Spacing between rows
+                    childAspectRatio: 1.2, // Aspect ratio of the cards
+                  ),
+                  children: [
+                    _buildActionCard(
+                      context,
+                      icon: Icons.person,
+                      label: 'View Profile',
+                      color: Colors.blueAccent,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                    ),
+                    _buildActionCard(
+                      context,
+                      icon: Icons.work,
+                      label: 'View Projects',
+                      color: Colors.green,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/projects');
+                      },
+                    ),
+                    _buildActionCard(
+                      context,
+                      icon: Icons.add,
+                      label: 'Create Project',
+                      color: Colors.orange,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/create-project');
+                      },
+                    ),
+                    _buildActionCard(
+                      context,
+                      icon: Icons.favorite,
+                      label: 'View Favorites',
+                      color: Colors.purple,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/favorites');
+                      },
+                    ),
+                    _buildActionCard(
+                      context,
+                      icon: Icons.people,
+                      label: 'View Users',
+                      color: Colors.teal,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/users');
+                      },
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/projects');
-                },
-                icon: const Icon(Icons.work, color: Colors.white), // Projects icon
-                label: const Text('View Projects', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method to build an action card
+  Widget _buildActionCard(
+      BuildContext context, {
+        required IconData icon,
+        required String label,
+        required Color color,
+        required VoidCallback onPressed,
+      }) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 48,
+                color: color,
               ),
               const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/create-project');
-                },
-                icon: const Icon(Icons.add, color: Colors.white), // Create project icon
-                label: const Text('Create Project', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: color,
                 ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/favorites');
-                },
-                icon: const Icon(Icons.favorite, color: Colors.white), // Favorites icon
-                label: const Text('View Favorites', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
