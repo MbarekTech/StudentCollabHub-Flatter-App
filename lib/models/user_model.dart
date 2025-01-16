@@ -7,6 +7,7 @@ class UserModel {
   final List<String>? skills;
   final String? bio;
   final bool receiveNotifications;
+  final List<String> favoriteProjects;
 
   UserModel({
     required this.uid,
@@ -16,7 +17,8 @@ class UserModel {
     this.major,
     this.skills,
     this.bio,
-    this.receiveNotifications = true, // Default to true
+    this.receiveNotifications = true,
+    this.favoriteProjects = const [],
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map, String uid) {
@@ -29,6 +31,7 @@ class UserModel {
       skills: List<String>.from(map['skills'] ?? []),
       bio: map['bio'],
       receiveNotifications: map['receiveNotifications'] ?? true,
+      favoriteProjects: List<String>.from(map['favoriteProjects'] ?? []),
     );
   }
 
@@ -41,6 +44,7 @@ class UserModel {
       'skills': skills,
       'bio': bio,
       'receiveNotifications': receiveNotifications,
+      'favoriteProjects': favoriteProjects,
     };
   }
 }

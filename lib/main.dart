@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_mate/screens/favorites_screen.dart';
 import 'package:provider/provider.dart';
 import 'screens/create_profile_screen.dart';
 import 'screens/create_project_screen.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => const ProfileScreen(),
         '/create-project': (context) => const CreateProjectScreen(),
         '/projects': (context) => const ProjectListingScreen(),
+        '/favorites': (context) => const FavoritesScreen(),
       },
     );
   }

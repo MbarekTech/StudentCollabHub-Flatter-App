@@ -229,7 +229,7 @@ class AppState extends ChangeNotifier {
           bio: bio,
           receiveNotifications: receiveNotifications,
         );
-        // Update the current user in the app state
+
         _currentUser = UserModel(
           uid: user.uid,
           username: username,
@@ -246,4 +246,48 @@ class AppState extends ChangeNotifier {
       print("Error updating user profile: $e");
     }
   }
+
+
+  Future<void> addFavoriteProject(String projectId) async {
+    if (_currentUser != null) {
+      await _databaseService.addFavoriteProject(userId: _currentUser!.uid, projectId: projectId);
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        username: _currentUser!.username,
+        email: _currentUser!.email,
+        name: _currentUser!.name,
+        major: _currentUser!.major,
+        skills: _currentUser!.skills,
+        bio: _currentUser!.bio,
+        receiveNotifications: _currentUser!.receiveNotifications,
+        favoriteProjects: [..._currentUser!.favoriteProjects, projectId], // Add to favorites
+      );
+      notifyListeners();
+    }
+  }
+
+
+  Future<void> removeFavoriteProject(String projectId) async {
+    if (_currentUser != null) {
+      await _databaseService.removeFavoriteProject(userId: _currentUser!.uid, projectId: projectId);
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        username: _currentUser!.username,
+        email: _currentUser!.email,
+        name: _currentUser!.name,
+        major: _currentUser!.major,
+        skills: _currentUser!.skills,
+        bio: _currentUser!.bio,
+        receiveNotifications: _currentUser!.receiveNotifications,
+        favoriteProjects: _currentUser!.favoriteProjects.where((id) => id != projectId).toList(), // Remove from favorites
+      );
+      notifyListeners();
+    }
+  }
+
+
+  bool isProjectFavorited(String projectId) {
+    return _currentUser?.favoriteProjects.contains(projectId) ?? false;
+  }
+
 }

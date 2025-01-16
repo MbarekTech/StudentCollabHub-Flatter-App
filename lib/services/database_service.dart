@@ -148,4 +148,25 @@ class DatabaseService {
       'receiveNotifications': receiveNotifications,
     });
   }
+
+
+
+  Future<void> addFavoriteProject({required String userId, required String projectId}) async {
+    await _firestore.collection('users').doc(userId).update({
+      'favoriteProjects': FieldValue.arrayUnion([projectId]),
+    });
+  }
+
+
+  Future<void> removeFavoriteProject({required String userId, required String projectId}) async {
+    await _firestore.collection('users').doc(userId).update({
+      'favoriteProjects': FieldValue.arrayRemove([projectId]),
+    });
+  }
+
+  Future<List<String>> getFavoriteProjects(String userId) async {
+    final doc = await _firestore.collection('users').doc(userId).get();
+    return List<String>.from(doc['favoriteProjects'] ?? []);
+  }
+
 }

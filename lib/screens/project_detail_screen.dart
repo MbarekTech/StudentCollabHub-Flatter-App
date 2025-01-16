@@ -59,6 +59,7 @@ class ProjectDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final currentUser = appState.currentUser;
+    final isFavorited = appState.isProjectFavorited(projectId); // Check if project is favorited
 
     return Scaffold(
       appBar: AppBar(
@@ -100,6 +101,25 @@ class ProjectDetailScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text('Collaborators: ${project.collaborators.length}', style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 24),
+                if (currentUser != null) ...[
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (isFavorited) {
+                          appState.removeFavoriteProject(projectId);
+                        } else {
+                          appState.addFavoriteProject(projectId);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isFavorited ? Colors.red : Colors.blueAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      ),
+                      child: Text(isFavorited ? 'Remove from Favorites' : 'Add to Favorites', style: const TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 if (currentUser != null && currentUser.uid == project.postedBy) ...[
                   Center(
                     child: ElevatedButton(
