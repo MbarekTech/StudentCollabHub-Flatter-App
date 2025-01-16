@@ -17,6 +17,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _skillsController = TextEditingController();
   final TextEditingController _collaboratorsController = TextEditingController();
+  bool _isLoading = false; // Added loading state
 
   @override
   void initState() {
@@ -39,6 +40,10 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   }
 
   void _createOrUpdateProject(BuildContext context) async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
     final appState = Provider.of<AppState>(context, listen: false);
     final title = _titleController.text;
     final description = _descriptionController.text;
@@ -62,9 +67,17 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
           numberOfCollaboratorsNeeded: collaborators,
         );
       }
+      setState(() {
+        _isLoading = false; // Stop loading
+      });
       Navigator.pop(context, true);
     } else {
-      print("Please fill in all fields");
+      setState(() {
+        _isLoading = false; // Stop loading
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
     }
   }
 
@@ -72,7 +85,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.project == null ? 'Create Project' : 'Edit Project', style: TextStyle(color: Colors.white)),
+        title: Text(widget.project == null ? 'Create Project' : 'Edit Project', style: const TextStyle(color: Colors.white)),
         backgroundColor: Colors.blueAccent,
       ),
       body: Container(
@@ -123,13 +136,15 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 24),
-                ElevatedButton(
+                _isLoading
+                    ? const CircularProgressIndicator() // Show loading indicator
+                    : ElevatedButton(
                   onPressed: () => _createOrUpdateProject(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                   ),
-                  child: Text(widget.project == null ? 'Create Project' : 'Update Project', style: TextStyle(color: Colors.white)),
+                  child: Text(widget.project == null ? 'Create Project' : 'Update Project', style: const TextStyle(color: Colors.white)),
                 ),
               ],
             ),

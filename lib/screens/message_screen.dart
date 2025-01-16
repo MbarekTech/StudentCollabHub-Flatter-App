@@ -52,7 +52,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 stream: appState.getMessagesStream(receiverId: widget.receiverId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator()); // Show loading indicator
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {

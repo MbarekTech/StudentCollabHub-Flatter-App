@@ -14,11 +14,12 @@ class ProjectListingScreen extends StatefulWidget {
 class _ProjectListingScreenState extends State<ProjectListingScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<ProjectModel> _filteredProjects = [];
+  bool _isLoading = true; // Added loading state
 
   @override
   void initState() {
     super.initState();
-    _filteredProjects = Provider.of<AppState>(context, listen: false).projects;
+    _loadProjects();
     _searchController.addListener(_filterProjects);
   }
 
@@ -26,6 +27,15 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _loadProjects() async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.loadProjects();
+    setState(() {
+      _filteredProjects = appState.projects;
+      _isLoading = false; // Stop loading
+    });
   }
 
   void _filterProjects() {
@@ -76,7 +86,9 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
       ),
       body: Container(
         color: Colors.grey[100],
-        child: ListView.builder(
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator()) // Show loading indicator
+            : ListView.builder(
           padding: const EdgeInsets.all(8.0),
           itemCount: _filteredProjects.length,
           itemBuilder: (context, index) {

@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false; // Added loading state
 
   @override
   void dispose() {
@@ -21,25 +22,45 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login(BuildContext context) async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
     final appState = Provider.of<AppState>(context, listen: false);
     final email = _emailController.text;
     final password = _passwordController.text;
 
     final user = await appState.login(email, password);
+    setState(() {
+      _isLoading = false; // Stop loading
+    });
+
     if (user != null) {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
-      print("Login failed!");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed! Please check your credentials.')),
+      );
     }
   }
 
   void _signInAsGuest(BuildContext context) async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
     final appState = Provider.of<AppState>(context, listen: false);
     final user = await appState.signInAsGuest();
+    setState(() {
+      _isLoading = false; // Stop loading
+    });
+
     if (user != null) {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
-      print("Guest login failed!");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Guest login failed!')),
+      );
     }
   }
 
@@ -82,7 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
+              _isLoading
+                  ? const CircularProgressIndicator() // Show loading indicator
+                  : ElevatedButton(
                 onPressed: () => _login(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
@@ -92,12 +115,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
               OutlinedButton(
-                onPressed: () => _signInAsGuest(context),
+                onPressed: _isLoading ? null : () => _signInAsGuest(context), // Disable button when loading
                 child: const Text('Login as Guest'),
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => _navigateToCreateAccount(context),
+                onPressed: _isLoading ? null : () => _navigateToCreateAccount(context), // Disable button when loading
                 child: const Text('Create Account'),
               ),
             ],
