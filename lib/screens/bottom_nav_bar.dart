@@ -36,6 +36,10 @@ class BottomNavBar extends StatelessWidget {
           icon: Icon(Icons.settings),
           label: 'Settings',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.assignment),
+          label: 'My Projects',
+        ),
       ],
     );
   }

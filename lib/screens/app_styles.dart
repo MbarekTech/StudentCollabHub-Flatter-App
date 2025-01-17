@@ -16,6 +16,10 @@ class AppStyles {
   static const TextStyle titleTextStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
   static const TextStyle subtitleTextStyle = TextStyle(fontSize: 18, color: Colors.grey);
 
+
+  static const EdgeInsets cardPadding = EdgeInsets.all(8.0);
+
+
   static InputDecoration inputDecoration({
     required String labelText,
     required IconData icon,

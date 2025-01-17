@@ -78,118 +78,213 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  project.title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  project.description,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Skills Needed: ${project.skillsNeeded.join(", ")}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Collaborators Needed: ${project.numberOfCollaboratorsNeeded}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Collaborators: ${project.collaborators.length}',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                // Project Details Card
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.work, color: Colors.blueAccent, size: 24),
+                            const SizedBox(width: 8),
+                            Text(
+                              project.title,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          project.description,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Divider(),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.construction, color: Colors.blueAccent, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Skills Needed: ${project.skillsNeeded.join(", ")}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.people, color: Colors.blueAccent, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Collaborators Needed: ${project.numberOfCollaboratorsNeeded}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.group, color: Colors.blueAccent, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Collaborators: ${project.collaborators.length}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 24),
-                if (currentUser != null) ...[
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        if (isFavorited) {
-                          appState.removeFavoriteProject(widget.projectId);
-                        } else {
-                          appState.addFavoriteProject(widget.projectId);
-                        }
-                      },
-                      icon: Icon(
-                        isFavorited ? Icons.favorite : Icons.favorite_border,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        isFavorited ? 'Remove from Favorites' : 'Add to Favorites',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isFavorited ? Colors.red : Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      ),
+
+                // Collaborators Section
+                if (project.collaborators.isNotEmpty) ...[
+                  const Text(
+                    'Collaborators:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: project.collaborators.length,
+                      itemBuilder: (context, index) {
+                        final collaboratorId = project.collaborators[index];
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(collaboratorId)
+                              .get(),
+                          builder: (context, userSnapshot) {
+                            if (userSnapshot.connectionState == ConnectionState.waiting) {
+                              return const ListTile(
+                                title: Text('Loading...'),
+                              );
+                            }
+
+                            if (!userSnapshot.hasData || !userSnapshot.data!.exists) {
+                              return const ListTile(
+                                title: Text('Unknown User'),
+                              );
+                            }
+
+                            final userData = userSnapshot.data!.data() as Map<String, dynamic>;
+                            final username = userData['username'] ?? 'Unknown';
+
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.blueAccent,
+                                child: Text(
+                                  username[0].toUpperCase(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              title: Text(
+                                username,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              trailing: currentUser?.uid == project.postedBy
+                                  ? IconButton(
+                                icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                onPressed: () => _removeCollaborator(context, collaboratorId),
+                              )
+                                  : null,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+
+                // Action Buttons
+                if (currentUser != null) ...[
+                  _buildActionButton(
+                    icon: isFavorited ? Icons.favorite : Icons.favorite_border,
+                    label: isFavorited ? 'Remove from Favorites' : 'Add to Favorites',
+                    color: isFavorited ? Colors.red : Colors.blueAccent,
+                    onPressed: () {
+                      if (isFavorited) {
+                        appState.removeFavoriteProject(widget.projectId);
+                      } else {
+                        appState.addFavoriteProject(widget.projectId);
+                      }
+                    },
                   ),
                   const SizedBox(height: 16),
                 ],
                 if (currentUser != null && currentUser.uid == project.postedBy) ...[
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _editProject(context, project),
-                      icon: const Icon(Icons.edit, color: Colors.white),
-                      label: const Text('Edit Project', style: TextStyle(color: Colors.white)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      ),
-                    ),
+                  _buildActionButton(
+                    icon: Icons.edit,
+                    label: 'Edit Project',
+                    color: Colors.blueAccent,
+                    onPressed: () => _editProject(context, project),
                   ),
                   const SizedBox(height: 16),
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _deleteProject(context),
-                      icon: const Icon(Icons.delete, color: Colors.white),
-                      label: const Text('Delete Project', style: TextStyle(color: Colors.white)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      ),
-                    ),
+                  _buildActionButton(
+                    icon: Icons.delete,
+                    label: 'Delete Project',
+                    color: Colors.red,
+                    onPressed: () => _deleteProject(context),
                   ),
                 ],
                 if (currentUser != null && currentUser.uid != project.postedBy) ...[
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: isCollaborator ? () => _leaveProject(context) : () => _joinProject(context),
-                      icon: Icon(
-                        isCollaborator ? Icons.exit_to_app : Icons.group_add,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        isCollaborator ? 'Leave Project' : 'Join Project',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isCollaborator ? Colors.red : Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      ),
-                    ),
+                  _buildActionButton(
+                    icon: isCollaborator ? Icons.exit_to_app : Icons.group_add,
+                    label: isCollaborator ? 'Leave Project' : 'Join Project',
+                    color: isCollaborator ? Colors.red : Colors.blueAccent,
+                    onPressed: isCollaborator ? () => _leaveProject(context) : () => _joinProject(context),
                   ),
                   const SizedBox(height: 16),
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MessageScreen(receiverId: project.postedBy),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.message, color: Colors.white),
-                      label: const Text('Message Creator', style: TextStyle(color: Colors.white)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      ),
-                    ),
+                  _buildActionButton(
+                    icon: Icons.message,
+                    label: 'Message Creator',
+                    color: Colors.green,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MessageScreen(receiverId: project.postedBy),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ],
@@ -201,6 +296,49 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onPressed,
+  }) {
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [color.withOpacity(0.8), color],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ElevatedButton.icon(
+          onPressed: onPressed,
+          icon: Icon(icon, color: Colors.white),
+          label: Text(
+            label,
+            style: const TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -245,5 +383,13 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
         userId: currentUser.uid,
       );
     }
+  }
+
+  void _removeCollaborator(BuildContext context, String userId) async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.removeCollaborator(
+      projectId: widget.projectId,
+      userId: userId,
+    );
   }
 }

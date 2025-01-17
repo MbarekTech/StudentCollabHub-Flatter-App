@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mate/screens/messages_screen.dart';
+import 'package:project_mate/screens/my_projects_screen.dart'; // Import the new screen
 import 'package:project_mate/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'models/user_model.dart';
@@ -16,13 +17,11 @@ import 'screens/favorites_screen.dart';
 import 'screens/users_screen.dart';
 import 'screens/user_profile_screen.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
 
   runApp(
     ChangeNotifierProvider(
@@ -31,7 +30,6 @@ void main() async {
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -87,6 +85,7 @@ class MyApp extends StatelessWidget {
         '/user-profile': (context) => UserProfileScreen(user: ModalRoute.of(context)!.settings.arguments as UserModel),
         '/messages': (context) => const MessagesScreen(),
         '/settings': (context) => const SettingsScreen(),
+        '/my-projects': (context) => const MyProjectsScreen(), // Add the new route
       },
     );
   }

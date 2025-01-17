@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // Function to fill login fields with test data
   void _fillTestData() {
     setState(() {
-      _emailController.text = 'test@test.com';
+      _emailController.text = 'mbarek@gmail.com';
       _passwordController.text = '123456';
     });
   }
