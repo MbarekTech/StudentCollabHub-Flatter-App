@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../models/project_model.dart';
 import 'project_detail_screen.dart';
+import 'bottom_nav_bar.dart'; // Import the BottomNavBar
 
 class ProjectListingScreen extends StatefulWidget {
   const ProjectListingScreen({super.key});
@@ -15,6 +16,7 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<ProjectModel> _filteredProjects = [];
   bool _isLoading = true;
+  int _selectedIndex = 1;
 
   @override
   void initState() {
@@ -49,6 +51,27 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
           project.skillsNeeded.join(", ").toLowerCase().contains(query))
           .toList();
     });
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/favorites');
+        break;
+      case 3:
+        Navigator.pushReplacementNamed(context, '/settings');
+        break;
+    }
   }
 
   @override
@@ -99,14 +122,18 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
                 leading: const Icon(Icons.work, color: Colors.blueAccent),
-                title: Text(project.title, style: Theme.of(context).textTheme.titleLarge),
-                subtitle: Text(project.description, style: Theme.of(context).textTheme.bodyLarge),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                title: Text(project.title,
+                    style: Theme.of(context).textTheme.titleLarge),
+                subtitle: Text(project.description,
+                    style: Theme.of(context).textTheme.bodyLarge),
+                trailing:
+                const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProjectDetailScreen(projectId: project.projectId),
+                      builder: (context) =>
+                          ProjectDetailScreen(projectId: project.projectId),
                     ),
                   );
                 },
@@ -114,6 +141,11 @@ class _ProjectListingScreenState extends State<ProjectListingScreen> {
             );
           },
         ),
+      ),
+      // Add the bottom navigation bar
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }

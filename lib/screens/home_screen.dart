@@ -2,8 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0; // Track the selected index for the bottom navigation bar
+
+  // Function to handle navigation bar item selection
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Navigate to the corresponding screen based on the selected index
+    switch (index) {
+      case 0:
+      // Home screen is already open
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/projects');
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/favorites');
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/settings');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +62,15 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Add the logo here
+              Center(
+                child: Image.asset(
+                  'assets/logo.png', // Path to your logo image
+                  height: 100, // Adjust the height as needed
+                  width: 100, // Adjust the width as needed
+                ),
+              ),
+              const SizedBox(height: 16), // Space between the logo and the welcome message
               if (user != null)
                 Text(
                   'Welcome, ${user.email}!',
@@ -121,6 +160,32 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      // Add the bottom navigation bar
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed, // Ensure all items are visible
+        currentIndex: _selectedIndex, // Highlight the selected item
+        onTap: _onItemTapped, // Handle item selection
+        selectedItemColor: Colors.blueAccent, // Color for the selected item
+        unselectedItemColor: Colors.grey, // Color for unselected items
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.work),
+            label: 'Projects',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }

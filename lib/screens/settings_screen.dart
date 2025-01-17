@@ -2,9 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import 'login_screen.dart';
+import 'bottom_nav_bar.dart'; // Import the BottomNavBar
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  int _selectedIndex = 3; // Set the index for Settings screen
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Navigate to the corresponding screen
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/projects');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/favorites');
+        break;
+      case 3:
+      // Already on the Settings screen
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +110,11 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      // Add the bottom navigation bar
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }

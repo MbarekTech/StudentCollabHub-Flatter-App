@@ -1,19 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/user_model.dart';
 import '../models/project_model.dart';
 import 'project_detail_screen.dart';
+import 'bottom_nav_bar.dart'; // Import the BottomNavBar
 
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   final UserModel user;
 
   const UserProfileScreen({super.key, required this.user});
 
   @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  int _selectedIndex = 2; // Set the index for User Profile screen (or adjust as needed)
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Navigate to the corresponding screen
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/projects');
+        break;
+      case 2:
+      // Already on the User Profile screen
+        break;
+      case 3:
+        Navigator.pushReplacementNamed(context, '/settings');
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(user.username, style: const TextStyle(color: Colors.white)),
+        title: Text(widget.user.username, style: const TextStyle(color: Colors.white)),
         backgroundColor: Colors.blueAccent,
       ),
       body: Container(
@@ -28,7 +59,7 @@ class UserProfileScreen extends StatelessWidget {
                   radius: 50,
                   backgroundColor: Colors.blueAccent,
                   child: Text(
-                    user.username[0].toUpperCase(),
+                    widget.user.username[0].toUpperCase(),
                     style: const TextStyle(fontSize: 40, color: Colors.white),
                   ),
                 ),
@@ -36,7 +67,7 @@ class UserProfileScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Center(
                 child: Text(
-                  user.username,
+                  widget.user.username,
                   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -47,7 +78,7 @@ class UserProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                user.skills?.join(", ") ?? "No skills listed",
+                widget.user.skills?.join(", ") ?? "No skills listed",
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 16),
@@ -60,7 +91,7 @@ class UserProfileScreen extends StatelessWidget {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('projects')
-                      .where('postedBy', isEqualTo: user.uid)
+                      .where('postedBy', isEqualTo: widget.user.uid)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -104,6 +135,11 @@ class UserProfileScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      // Add the bottom navigation bar
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }

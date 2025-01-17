@@ -5,51 +5,39 @@ import '../state/app_state.dart';
 import '../models/project_model.dart';
 import 'create_project_screen.dart';
 import 'message_screen.dart';
+import 'bottom_nav_bar.dart'; // Import the BottomNavBar
 
-class ProjectDetailScreen extends StatelessWidget {
+class ProjectDetailScreen extends StatefulWidget {
   final String projectId;
 
   const ProjectDetailScreen({super.key, required this.projectId});
 
-  void _editProject(BuildContext context, ProjectModel project) async {
-    final appState = Provider.of<AppState>(context, listen: false);
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateProjectScreen(project: project),
-      ),
-    );
+  @override
+  State<ProjectDetailScreen> createState() => _ProjectDetailScreenState();
+}
 
-    if (result == true) {
-      await appState.loadProjects();
-    }
-  }
+class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
+  int _selectedIndex = 1; // Set the index for Project Detail screen (or adjust as needed)
 
-  void _deleteProject(BuildContext context) async {
-    final appState = Provider.of<AppState>(context, listen: false);
-    await appState.deleteProject(projectId: projectId);
-    Navigator.pop(context);
-  }
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  void _joinProject(BuildContext context) async {
-    final appState = Provider.of<AppState>(context, listen: false);
-    final currentUser = appState.currentUser;
-    if (currentUser != null) {
-      await appState.addCollaborator(
-        projectId: projectId,
-        userId: currentUser.uid,
-      );
-    }
-  }
-
-  void _leaveProject(BuildContext context) async {
-    final appState = Provider.of<AppState>(context, listen: false);
-    final currentUser = appState.currentUser;
-    if (currentUser != null) {
-      await appState.removeCollaborator(
-        projectId: projectId,
-        userId: currentUser.uid,
-      );
+    // Navigate to the corresponding screen
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/projects');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/favorites');
+        break;
+      case 3:
+        Navigator.pushReplacementNamed(context, '/settings');
+        break;
     }
   }
 
@@ -57,7 +45,7 @@ class ProjectDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final currentUser = appState.currentUser;
-    final isFavorited = appState.isProjectFavorited(projectId);
+    final isFavorited = appState.isProjectFavorited(widget.projectId);
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +56,7 @@ class ProjectDetailScreen extends StatelessWidget {
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('projects')
-            .doc(projectId)
+            .doc(widget.projectId)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,7 +68,7 @@ class ProjectDetailScreen extends StatelessWidget {
           }
 
           final projectData = snapshot.data!.data() as Map<String, dynamic>;
-          final project = ProjectModel.fromMap(projectData, projectId);
+          final project = ProjectModel.fromMap(projectData, widget.projectId);
 
           final isCollaborator =
               currentUser != null && project.collaborators.contains(currentUser.uid);
@@ -120,9 +108,9 @@ class ProjectDetailScreen extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         if (isFavorited) {
-                          appState.removeFavoriteProject(projectId);
+                          appState.removeFavoriteProject(widget.projectId);
                         } else {
-                          appState.addFavoriteProject(projectId);
+                          appState.addFavoriteProject(widget.projectId);
                         }
                       },
                       icon: Icon(
@@ -209,6 +197,53 @@ class ProjectDetailScreen extends StatelessWidget {
           );
         },
       ),
+      // Add the bottom navigation bar
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
+  }
+
+  void _editProject(BuildContext context, ProjectModel project) async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateProjectScreen(project: project),
+      ),
+    );
+
+    if (result == true) {
+      await appState.loadProjects();
+    }
+  }
+
+  void _deleteProject(BuildContext context) async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.deleteProject(projectId: widget.projectId);
+    Navigator.pop(context);
+  }
+
+  void _joinProject(BuildContext context) async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    final currentUser = appState.currentUser;
+    if (currentUser != null) {
+      await appState.addCollaborator(
+        projectId: widget.projectId,
+        userId: currentUser.uid,
+      );
+    }
+  }
+
+  void _leaveProject(BuildContext context) async {
+    final appState = Provider.of<AppState>(context, listen: false);
+    final currentUser = appState.currentUser;
+    if (currentUser != null) {
+      await appState.removeCollaborator(
+        projectId: widget.projectId,
+        userId: currentUser.uid,
+      );
+    }
   }
 }
