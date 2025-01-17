@@ -5,6 +5,8 @@ import '../models/project_model.dart';
 class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Getter to expose Firestore
+  FirebaseFirestore get firestore => _firestore;
   Future<void> createProject({
     required String title,
     required String description,

@@ -68,6 +68,14 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushNamed(context, '/create-profile');
   }
 
+  // Function to fill login fields with test data
+  void _fillTestData() {
+    setState(() {
+      _emailController.text = 'test@test.com';
+      _passwordController.text = '123456';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Add the logo here
+                const SizedBox(height: 30),
                 Image.asset(
                   'assets/logo.png', // Path to your logo image
                   height: 150, // Adjust the height as needed
@@ -109,6 +117,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 32), // Add more space before the form
+
+                // Button to fill test data
+                OutlinedButton(
+                  onPressed: _fillTestData,
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    side: const BorderSide(color: Colors.green),
+                  ),
+                  child: const Text(
+                    'Fill Test Data',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+                const SizedBox(height: 16), // Space between the button and the form
+
                 // Email field
                 TextFormField(
                   controller: _emailController,

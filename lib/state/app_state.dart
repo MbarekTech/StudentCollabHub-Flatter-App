@@ -86,25 +86,47 @@ class AppState extends ChangeNotifier {
     required String bio,
   }) async {
     try {
+      // Step 1: Create the user in Firebase Authentication
       final userCredential = await _authService.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      if (userCredential != null) {
-        _currentUser = UserModel(
-          uid: userCredential.uid,
+
+      // Step 2: Get the User object from the UserCredential
+      final user = userCredential.user;
+
+      if (user != null) {
+        // Step 3: Create a UserModel object for the new user
+        final newUser = UserModel(
+          uid: user.uid, // Use the UID from Firebase Authentication
           username: username,
           email: email,
           name: name,
           major: major,
           skills: skills,
           bio: bio,
+          receiveNotifications: true, // Default value
+          favoriteProjects: [], // Default value
         );
+
+        // Step 4: Add the user document to Firestore
+        await _databaseService.firestore
+            .collection('users')
+            .doc(user.uid) // Use the UID as the document ID
+            .set(newUser.toMap());
+
+        // Step 5: Update the current user in the app state
+        _currentUser = newUser;
         notifyListeners();
-        return userCredential;
+
+        // Step 6: Return the created user
+        return user;
+      } else {
+        // If user creation fails, return null
+        return null;
       }
-      return null;
     } catch (e) {
+      // Handle errors
       print("Error creating user: $e");
       return null;
     }
