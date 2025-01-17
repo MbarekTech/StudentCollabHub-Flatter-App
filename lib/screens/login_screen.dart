@@ -79,51 +79,109 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.grey[100],
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Add the logo here
+                Image.asset(
+                  'assets/logo.png', // Path to your logo image
+                  height: 150, // Adjust the height as needed
+                  width: 150, // Adjust the width as needed
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
+                const SizedBox(height: 16), // Add some space between the logo and the slogan
+                // Add the slogan
+                const Text(
+                  'Project Mate',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueAccent,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              _isLoading
-                  ? const CircularProgressIndicator() // Show loading indicator
-                  : ElevatedButton(
-                onPressed: () => _login(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                const SizedBox(height: 8), // Space between the app name and slogan
+                const Text(
+                  'Connect. Collaborate. Create.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
-                child: const Text('Login', style: TextStyle(color: Colors.white)),
-              ),
-              const SizedBox(height: 16),
-              OutlinedButton(
-                onPressed: _isLoading ? null : () => _signInAsGuest(context), // Disable button when loading
-                child: const Text('Login as Guest'),
-              ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: _isLoading ? null : () => _navigateToCreateAccount(context), // Disable button when loading
-                child: const Text('Create Account'),
-              ),
-            ],
+                const SizedBox(height: 32), // Add more space before the form
+                // Email field
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.email, color: Colors.blueAccent),
+                  ),
+                ),
+                const SizedBox(height: 16), // Space between fields
+                // Password field
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.lock, color: Colors.blueAccent),
+                  ),
+                ),
+                const SizedBox(height: 24), // Space before the login button
+                // Login button
+                _isLoading
+                    ? const CircularProgressIndicator() // Show loading indicator
+                    : ElevatedButton(
+                  onPressed: () => _login(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+                const SizedBox(height: 16), // Space between buttons
+                // Guest login button
+                OutlinedButton(
+                  onPressed: _isLoading ? null : () => _signInAsGuest(context), // Disable button when loading
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    side: const BorderSide(color: Colors.blueAccent),
+                  ),
+                  child: const Text(
+                    'Login as Guest',
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                ),
+                const SizedBox(height: 16), // Space between buttons
+                // Create account button
+                TextButton(
+                  onPressed: _isLoading ? null : () => _navigateToCreateAccount(context), // Disable button when loading
+                  child: const Text(
+                    'Create Account',
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
