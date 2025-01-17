@@ -53,29 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: ListView(
             children: [
               if (currentUser != null) ...[
-                // Notification Settings
-                Card(
-                  elevation: 2,
-                  child: ListTile(
-                    title: const Text('Notifications'),
-                    subtitle: const Text('Enable or disable notifications'),
-                    trailing: Switch(
-                      value: currentUser.receiveNotifications,
-                      onChanged: (value) async {
-                        await appState.updateUserProfile(
-                          username: currentUser.username,
-                          email: currentUser.email,
-                          name: currentUser.name,
-                          major: currentUser.major,
-                          skills: currentUser.skills,
-                          bio: currentUser.bio,
-                          receiveNotifications: value,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
+
 
                 // Change Password
                 Card(

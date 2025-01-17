@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../models/project_model.dart';
+import 'app_styles.dart'; // Import common styles
 
 class CreateProjectScreen extends StatefulWidget {
   final ProjectModel? project;
@@ -17,7 +18,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _skillsController = TextEditingController();
   final TextEditingController _collaboratorsController = TextEditingController();
-  bool _isLoading = false; // Added loading state
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
 
   void _createOrUpdateProject(BuildContext context) async {
     setState(() {
-      _isLoading = true; // Start loading
+      _isLoading = true;
     });
 
     final appState = Provider.of<AppState>(context, listen: false);
@@ -51,33 +52,40 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
     final collaborators = int.tryParse(_collaboratorsController.text) ?? 1;
 
     if (title.isNotEmpty && description.isNotEmpty && skills.isNotEmpty) {
-      if (widget.project == null) {
-        await appState.createProject(
-          title: title,
-          description: description,
-          skillsNeeded: skills,
-          numberOfCollaboratorsNeeded: collaborators,
+      try {
+        if (widget.project == null) {
+          await appState.createProject(
+            title: title,
+            description: description,
+            skillsNeeded: skills,
+            numberOfCollaboratorsNeeded: collaborators,
+          );
+        } else {
+          await appState.updateProject(
+            projectId: widget.project!.projectId,
+            title: title,
+            description: description,
+            skillsNeeded: skills,
+            numberOfCollaboratorsNeeded: collaborators,
+          );
+        }
+        Navigator.pop(context, true);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
         );
-      } else {
-        await appState.updateProject(
-          projectId: widget.project!.projectId,
-          title: title,
-          description: description,
-          skillsNeeded: skills,
-          numberOfCollaboratorsNeeded: collaborators,
-        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
-      setState(() {
-        _isLoading = false; // Stop loading
-      });
-      Navigator.pop(context, true);
     } else {
-      setState(() {
-        _isLoading = false; // Stop loading
-      });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all fields')),
       );
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -85,72 +93,93 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.project == null ? 'Create Project' : 'Edit Project', style: const TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blueAccent,
+        title: Text(
+          widget.project == null ? 'Create Project' : 'Edit Project',
+          style: AppStyles.appBarTextStyle,
+        ),
+        backgroundColor: AppStyles.primaryColor,
       ),
       body: Container(
-        color: Colors.grey[100],
+        color: AppStyles.backgroundColor,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: AppStyles.defaultPadding,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
+                _buildInputField(
                   controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Title',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Title',
+                  hintText: 'Enter project title',
+                  icon: Icons.title,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Description',
+                  hintText: 'Enter project description',
+                  icon: Icons.description,
+                  maxLines: 3,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _skillsController,
-                  decoration: const InputDecoration(
-                    labelText: 'Skills Needed (comma-separated)',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Skills Needed (comma-separated)',
+                  hintText: 'e.g., Flutter, Dart, UI/UX',
+                  icon: Icons.work,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _collaboratorsController,
-                  decoration: const InputDecoration(
-                    labelText: 'Number of Collaborators Needed',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Number of Collaborators Needed',
+                  hintText: 'Enter a number',
+                  icon: Icons.people,
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 24),
                 _isLoading
-                    ? const CircularProgressIndicator() // Show loading indicator
+                    ? const CircularProgressIndicator()
                     : ElevatedButton(
-                  onPressed: () => _createOrUpdateProject(context),
+                  onPressed: _isLoading ? null : () => _createOrUpdateProject(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    backgroundColor: AppStyles.primaryColor,
+                    padding: AppStyles.buttonPadding,
                   ),
-                  child: Text(widget.project == null ? 'Create Project' : 'Update Project', style: const TextStyle(color: Colors.white)),
+                  child: Text(
+                    widget.project == null ? 'Create Project' : 'Update Project',
+                    style: AppStyles.buttonTextStyle,
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // Reusable input field widget with icons
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String labelText,
+    required IconData icon,
+    String? hintText,
+    int maxLines = 1,
+    TextInputType? keyboardType,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        hintText: hintText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        prefixIcon: Icon(icon, color: AppStyles.primaryColor),
+      ),
+      maxLines: maxLines,
+      keyboardType: keyboardType,
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
+import 'bottom_nav_bar.dart';
+import 'app_styles.dart'; // Import the common styles
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -17,6 +19,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _skillsController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   bool _receiveNotifications = true;
+  int _selectedIndex = 3;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/projects');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/favorites');
+        break;
+      case 3:
+        break;
+    }
+  }
 
   @override
   void initState() {
@@ -63,99 +86,110 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blueAccent,
+        title: const Text('Edit Profile', style: AppStyles.appBarTextStyle),
+        backgroundColor: AppStyles.primaryColor,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: AppStyles.textColor),
       ),
       body: Container(
-        color: Colors.grey[100],
+        color: AppStyles.backgroundColor,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: AppStyles.defaultPadding,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
+                _buildInputField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Username',
+                  icon: Icons.person,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Email',
+                  icon: Icons.email,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Name',
+                  icon: Icons.badge,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _majorController,
-                  decoration: const InputDecoration(
-                    labelText: 'Major',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Major',
+                  icon: Icons.school,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _skillsController,
-                  decoration: const InputDecoration(
-                    labelText: 'Skills (comma-separated)',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Skills (comma-separated)',
+                  icon: Icons.work,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                _buildInputField(
                   controller: _bioController,
-                  decoration: const InputDecoration(
-                    labelText: 'Bio',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+                  labelText: 'Bio',
+                  icon: Icons.description,
+                  maxLines: 3,
                 ),
                 const SizedBox(height: 16),
-                SwitchListTile(
-                  title: const Text('Receive Notifications'),
-                  value: _receiveNotifications,
-                  onChanged: (value) {
-                    setState(() {
-                      _receiveNotifications = value;
-                    });
-                  },
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: SwitchListTile(
+                    title: const Text(
+                      'Receive Notifications',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    value: _receiveNotifications,
+                    onChanged: (value) {
+                      setState(() {
+                        _receiveNotifications = value;
+                      });
+                    },
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: () => _updateProfile(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    backgroundColor: AppStyles.primaryColor,
+                    padding: AppStyles.buttonPadding,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  child: const Text('Save Profile', style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    'Save Profile',
+                    style: AppStyles.buttonTextStyle,
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String labelText,
+    required IconData icon,
+    int maxLines = 1,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: AppStyles.inputDecoration(labelText: labelText, icon: icon),
+      maxLines: maxLines,
     );
   }
 }
