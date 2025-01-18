@@ -135,7 +135,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   maxLines: 3,
                 ),
                 const SizedBox(height: 16),
-                Card(
+                /*Card(
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -152,7 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       });
                     },
                   ),
-                ),
+                ),*/
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: () => _updateProfile(context),

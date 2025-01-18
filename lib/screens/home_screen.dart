@@ -25,25 +25,31 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> _actions = [
     {
       'icon': Icons.person,
-      'label': 'View Profile',
+      'label': 'My Profile',
       'color': Colors.blueAccent,
       'route': '/profile',
     },
     {
+      'icon': Icons.assignment,
+      'label': 'My Projects',
+      'color': Colors.orange,
+      'route': '/my-projects',
+    },
+    {
       'icon': Icons.work,
-      'label': 'View Projects',
+      'label': 'All Projects',
       'color': Colors.green,
       'route': '/projects',
     },
     {
       'icon': Icons.favorite,
-      'label': 'View Favorites',
+      'label': 'Favorites',
       'color': Colors.purple,
       'route': '/favorites',
     },
     {
       'icon': Icons.people,
-      'label': 'View Users',
+      'label': 'All Users',
       'color': Colors.teal,
       'route': '/users',
     },
@@ -59,12 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'color': Colors.blueGrey,
       'route': '/settings',
     },
-    {
-      'icon': Icons.assignment,
-      'label': 'My Projects',
-      'color': Colors.orange,
-      'route': '/my-projects',
-    },
+
   ];
 
   void _onItemTapped(int index) async {
