@@ -5,9 +5,14 @@ A modern Flutter mobile application designed to connect students and facilitate 
 ## Screenshots
 
 <div align="center">
-  <img src="screenshots/screenshot1.png" alt="App Screenshot 1" width="300"/>
-  <img src="screenshots/screenshot2.png" alt="App Screenshot 2" width="300"/>
+  <img src="screenshots/home-screen.png" alt="Home Screen - Dashboard with quick actions" width="250"/>
+  <img src="screenshots/project-listing.png" alt="Project Listing - Browse available projects" width="250"/>
+  <br><br>
+  <img src="screenshots/project-details.png" alt="Project Details - View project information" width="250"/>
+  <img src="screenshots/user-profile.png" alt="User Profile - View student profiles and skills" width="250"/>
 </div>
+
+*From left to right: Home dashboard, Project browsing, Project details, and User profiles*
 
 ## Features
 
