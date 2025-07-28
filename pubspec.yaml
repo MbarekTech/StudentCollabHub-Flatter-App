@@ -1,5 +1,5 @@
-name: project_mate
-description: "A new Flutter project."
+name: student_collab_hub
+description: "A modern Flutter app connecting students for academic project collaboration. Find teammates, share skills, and build amazing projects together."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

@@ -20,29 +20,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCptx2yPw9O4NHVEU0pUGUI3XdIPQalW-8',
-    appId: '1:939845773497:web:d737544ae834c7781f1368',
-    messagingSenderId: '939845773497',
-    projectId: 'projectmatch-52469',
-    authDomain: 'projectmatch-52469.firebaseapp.com',
-    storageBucket: 'projectmatch-52469.firebasestorage.app',
-    measurementId: 'G-3XL9F8XX7B',
+    apiKey: 'YOUR_WEB_API_KEY',
+    appId: 'YOUR_WEB_APP_ID',
+    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
+    measurementId: 'YOUR_MEASUREMENT_ID',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyACmsY8DQQ-Q2530DRMLyi2C_P0cj7TKGo',
-    appId: '1:939845773497:android:b37a3aa71320d0091f1368',
-    messagingSenderId: '939845773497',
-    projectId: 'projectmatch-52469',
-    storageBucket: 'projectmatch-52469.firebasestorage.app',
+    apiKey: 'YOUR_ANDROID_API_KEY',
+    appId: 'YOUR_ANDROID_APP_ID',
+    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCK5PxY2j8e7BYStK0B-d9LLPLl8fZjO8Y',
-    appId: '1:939845773497:ios:afe7d6e25d6be19c1f1368',
-    messagingSenderId: '939845773497',
-    projectId: 'projectmatch-52469',
-    storageBucket: 'projectmatch-52469.firebasestorage.app',
-    iosBundleId: 'com.example.projectMatch',
+    apiKey: 'YOUR_IOS_API_KEY',
+    appId: 'YOUR_IOS_APP_ID',
+    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
+    iosBundleId: 'com.example.studentCollabHub',
   );
 }

@@ -9,6 +9,26 @@
 .history
 .svn/
 migrate_working_dir/
+*.lock
+*.tmp
+*.temp
+
+# Operating System
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
 
 # IntelliJ related
 *.iml
@@ -16,10 +36,15 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Android Studio
+.gradle/
+gradle-wrapper.jar
+.navigation/
+captures/
+output.json
+*.apk
+*.ap_
+*.dex
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -27,9 +52,14 @@ migrate_working_dir/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
 /build/
+pubspec.lock
+
+# Web related
+lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -37,7 +67,125 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Android build artifacts
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+/android/.gradle/
+/android/captures/
+/android/gradlew
+/android/gradlew.bat
+/android/local.properties
+/android/key.properties
+/android/app/release/
+android/app/output-metadata.json
+
+# iOS build artifacts
+/ios/Flutter/flutter_assets/
+/ios/Flutter/flutter_export_environment.sh
+/ios/ServiceDefinitions.json
+/ios/Runner/GeneratedPluginRegistrant.*
+/ios/.symlinks/
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/ephemeral/
+/ios/build/
+ios/Flutter/flutter_export_environment.sh
+
+# macOS
+/macos/Flutter/ephemeral/
+/macos/Flutter/GeneratedPluginRegistrant.swift
+
+# Linux
+/linux/flutter/ephemeral/
+
+# Windows
+/windows/flutter/ephemeral/
+
+# Firebase configuration files (NEVER commit these with real data)
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
+firebase.json
+.firebaserc
+.firebase/
+
+# API Keys and Secrets
+.env
+.env.local
+.env.production
+.env.staging
+*.env
+secrets.json
+api_keys.dart
+config/secrets.dart
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Test artifacts
+test_results/
+coverage/
+.nyc_output/
+
+# Backup files
+*.bak
+*.backup
+*.orig
+*~
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.gr.dart
+*.config.dart
+*.generated.dart
+
+# Fastlane (iOS deployment)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Certificate files
+*.p12
+*.cer
+*.mobileprovision
+*.keystore
+
+# FVM (Flutter Version Management)
+.fvm/flutter_sdk
+
+# Mason (Code generation)
+.mason/
+
+# Local configuration files
+.flutter-plugins-dependencies
+.metadata
+
+# Analysis and documentation
+doc/api/
+dartdoc_options.yaml
+
+# Code generation
+**/*.g.dart
+**/*.freezed.dart
+**/*.gr.dart
+**/*.config.dart
+**/*.generated.dart
